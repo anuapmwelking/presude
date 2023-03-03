@@ -12,35 +12,30 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$userName = $_POST ['userName'];
-$userNumber = $_POST ['userNumber'];
-$userEmail = $_POST ['userEmail'];
-$userPass = $_POST ['userPass'];
+if(isset($_POST['submit'])){
+  $userName = $_POST ['userName'];
+  $userNumber = $_POST ['userNumber'];
+  $userEmail = $_POST ['userEmail'];
+  $userPass = $_POST ['userPass'];
 
-$sql = "INSERT INTO users (name ,email,phone, password) VALUES ('$userName','$userEmail','$userNumber','$userPass')";
-// $sql = mysql_query("INSERT INTO users (name ,email,phone, password) VALUES ('$userName','$userEmail','$userNumber','$userPass')");
+  $checkUser = "SELECT * from users where email = '$userEmail' ";
+  $result = mysqli_query($conn,$checkUser);
+  $count = mysqli_num_rows($result);
+  if($count>0 ){
+    echo "user signed up already";
+    $_SESSION['exist']="User already Registered";
+     header('location:register.php');
+  }
+  else{
 
-// if ($conn->query($sql) === TRUE) {
-// //   echo "New record created successfully";
-// $_SESSION['created']="Registration Successful!!";
-// header('location:index.php');
-
-// }
-// else {
-//   echo "Error: " . $sql . "<br>" . $conn->error;
-// }
-
-// if (mysqli_errno() == 1062) {
-//   print 'no way!';
-// }
-
-if(mysqli_query($conn,$sql)){
-  echo "data inserted into DB<br>";                   
-}else{
- if(mysqli_errno($conn) == 1062)
-     echo "duplicate entry no need to insert into DB<br>";
- else
-  echo "db insertion error:".$sql."<br>";
+    
+    $sql = "INSERT INTO users (name ,email,phone, password) VALUES ('$userName','$userEmail','$userNumber','$userPass')";
+    if($conn->query($sql)){
+      // echo "user added";
+      $_SESSION['created']="Registered Successfully";
+      header('location:index.php');
+    }
+  }
 
 }
 

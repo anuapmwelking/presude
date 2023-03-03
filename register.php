@@ -1,5 +1,11 @@
-<?php include('header.php'); ?>
+<?php session_start(); ?>
 <div class="container">
+  <p style="color:red"><?php if (isset($_SESSION['exist']))
+  {
+      echo $_SESSION['exist'];
+      unset($_SESSION['exist']);
+  } ?></p>
+  <?php include('header.php'); ?>
 
 <form method="post" name="customerData" action="addUser.php">
         <h2 class="my-3">Registration Form</h2>
@@ -22,7 +28,7 @@
           </p>
          
           <p>
-            <input type="submit" class="btn btn-primary" value="SUBMIT" />
+            <input type="submit" name ="submit" class="btn btn-primary" value="SUBMIT" />
           </p>
           </div>
         </form>
